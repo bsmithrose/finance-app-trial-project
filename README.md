@@ -1,5 +1,19 @@
 # Finance App Trial Project
 
+To set up:
+
+composer install
+npm install
+npm run dev
+php artisan migrate:fresh --seed
+This will create a user with the details
+
+test@example.com / password
+
+this user will have an account and an initial balance and transaction also.
+
+#################################################
+
 This project proposal has been put together to help developers who are applying for new positions but don't have any sample code to provide during the hiring process.
 
 We've put together a basic Laravel starter app, which includes authentication scaffolding. To get started, run the following commands:
