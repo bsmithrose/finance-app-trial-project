@@ -15,7 +15,7 @@ test@example.com / password
 
 this user will have an account and an initial balance and transaction also.
 
-#################################################
+
 
 This project proposal has been put together to help developers who are applying for new positions but don't have any sample code to provide during the hiring process.
 
