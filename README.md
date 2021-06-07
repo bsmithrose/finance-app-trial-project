@@ -2,10 +2,13 @@
 
 To set up:
 
+```
 composer install
 npm install
 npm run dev
 php artisan migrate:fresh --seed
+```
+
 This will create a user with the details
 
 test@example.com / password
