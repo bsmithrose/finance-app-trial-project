@@ -15,7 +15,7 @@ class AccountController extends Controller
         $this->accountService = $accountService;
     }
 
-    public function index()
+    public function index(): AccountResource
     {
         try {
             $user = Auth::user();
