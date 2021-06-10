@@ -7,6 +7,7 @@ use App\Services\TransactionService;
 use App\Services\AccountService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Log;
 
 class CsvImportFinishedListener implements ShouldQueue
 {

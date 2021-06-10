@@ -11,6 +11,8 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Bus\Batchable;
 
+use Illuminate\Support\Facades\Log;
+
 
 class ProcessCsvRow implements ShouldQueue
 {

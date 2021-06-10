@@ -38,12 +38,14 @@ class TransactionService
             Transaction::where('jobid', $jobParent)
             ->notProcessed()
             ->update(['processed' => 1]);
-
+        });
+        DB::transaction(function() use ($jobParent) {
             $account = Transaction::where('jobid', $jobParent)->first()->account;
             $newBalance = Transaction::where('processed', 1)->sum('value');
             $account->balance = $newBalance;
             $account->save();
         });
+
     }
 
     public function delete($id)
