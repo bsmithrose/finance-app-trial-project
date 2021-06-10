@@ -21,7 +21,7 @@ class AccountController extends Controller
             $user = Auth::user();
             $account_id = $user->accounts()->first()->id;
 
-            return $this->accountService->getAllWithTransactions($account_id);
+            return $this->accountService->getAllWithProcessedTransactions($account_id);
         } catch (\Exception $e) {
             // handle exception
         }

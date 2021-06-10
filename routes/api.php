@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\CsvImportController;
+use App\Services\TransactionService;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,4 +26,5 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('/account', [AccountController::class, 'index']);
     Route::apiResource('/transactions', TransactionController::class);
+    Route::post('/import', [CsvImportController::class, 'store']);
 });
