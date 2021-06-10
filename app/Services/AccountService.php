@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\Account;
 use App\Http\Resources\AccountResource;
 
-use Illuminate\Support\Facades\Log;
 
 class AccountService
 {

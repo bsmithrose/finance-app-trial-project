@@ -8,8 +8,13 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use League\Csv\Reader;
 use App\Jobs\ProcessCsvRow;
+use Illuminate\Bus\Batch;
+use Illuminate\Support\Facades\Bus;
+use Throwable;
 use App\Services\TransactionService;
 use App\Events\CsvImportFinishedEvent;
+
+use Illuminate\Support\Facades\Log;
 
 class ProcessCsv implements ShouldQueue
 {
@@ -37,13 +42,30 @@ class ProcessCsv implements ShouldQueue
         $jobId = $this->job->getJobId();
         $reader = Reader::createFromPath($this->file, 'r');
         $records = $reader->getRecords();
-        foreach ($records as $record) {
-            if ($record[0] === 'Label') {
+        $recordsArray = [];
+
+        foreach($records as $record) {
+            if($record[0] === 'Label') {
                 continue;
             }
-            ProcessCsvRow::dispatchSync($record, $jobId);
+            $recordsArray[] = $record;
         }
-        
-        CsvImportFinishedEvent::dispatch($jobId);
+
+        $chunked = array_chunk($recordsArray, 200);
+
+        $jobArray = [];
+        foreach ($chunked as $chunk) {
+            $jobArray[] = new ProcessCsvRow($chunk, $jobId);
+        }
+
+        $batch = Bus::batch($jobArray)
+            ->then(function (Batch $batch) {
+            })
+            ->catch(function (Batch $batch) {
+                Log::info($batch);
+            })
+            ->finally(function(Batch $batch, $jobId) {
+                CsvImportFinishedEvent::dispatch($jobId);
+            })->dispatch();
     }
 }

@@ -9,12 +9,14 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Bus\Batchable;
+
 
 class ProcessCsvRow implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Batchable;
 
-    private $record;
+    private $records;
     private $jobParent;
 
     /**
@@ -24,7 +26,7 @@ class ProcessCsvRow implements ShouldQueue
      */
     public function __construct($record, $jobParent)
     {
-        $this->record = $record;
+        $this->records = $record;
         $this->jobParent = $jobParent;
     }
 
@@ -35,14 +37,16 @@ class ProcessCsvRow implements ShouldQueue
      */
     public function handle(TransactionService $transactionService)
     {
-        //hardcoded the account no. as not present in csv data
-        $transactionService->import([
-            'account_id' => 1,
-            'label' => $this->record[0],
-            'value' => $this->record[1],
-            'date' => $this->record[2],
-            'processed' => 0,
-            'jobid' => $this->jobParent,
-        ]);
+        foreach($this->records as $record) {
+            //hardcoded the account no. as not present in csv data
+            $transactionService->import([
+                'account_id' => 1,
+                'label' => $record[0],
+                'value' => $record[1],
+                'date' => $record[2],
+                'processed' => 0,
+                'jobid' => $this->jobParent,
+            ]);
+        }
     }
 }
