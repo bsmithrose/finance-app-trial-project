@@ -64,8 +64,8 @@ class ProcessCsv implements ShouldQueue
             ->catch(function (Batch $batch) {
                 Log::info($batch);
             })
-            ->finally(function(Batch $batch, $jobId) {
-                CsvImportFinishedEvent::dispatch($jobId);
-            })->dispatch();
+            ->finally(fn() =>
+                CsvImportFinishedEvent::dispatch($jobId)
+            )->dispatch();
     }
 }
